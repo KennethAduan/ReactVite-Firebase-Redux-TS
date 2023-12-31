@@ -7,7 +7,7 @@ This is a boilerplate for a React application using Vite, Firebase, and Redux To
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/KennethAduan/REACT-VITE-FIREBASE-RT-TS.git
+   git clone https://github.com/KennethAduan/react-vite-firebase-redux-ts.git
    cd your-repo
 2. Install dependencies:
    npm install

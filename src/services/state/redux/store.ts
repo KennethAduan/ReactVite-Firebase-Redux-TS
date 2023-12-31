@@ -1,5 +1,9 @@
-import { configureStore } from "@reduxjs/toolkit";
-import userSlice from "./slice/userSlice";
+import {
+  configureStore,
+  combineReducers,
+  createAction,
+} from "@reduxjs/toolkit";
+import storage from "redux-persist/lib/storage"; // defaults to localStorage for web
 import {
   persistReducer,
   FLUSH,
@@ -8,21 +12,42 @@ import {
   PERSIST,
   PURGE,
   REGISTER,
+  PersistConfig,
 } from "redux-persist";
-import storage from "redux-persist/lib/storage"; // defaults to localStorage
-import { combineReducers } from "@reduxjs/toolkit";
-import { createAction } from "@reduxjs/toolkit";
-const persistConfig = {
+import { encryptTransform } from "redux-persist-transform-encrypt";
+
+import userSlice from "./slice/userSlice";
+import credentialSlice from "./slice/credentialSlice";
+// Encrypt transform configuration
+const encryptor = encryptTransform({
+  secretKey: "my-super-secret-key", // Use a secure key
+  onError: function (error: Error) {
+    // Handle the error
+    console.error("Encryptor error:", error);
+  },
+});
+
+// Persist configuration with encryption
+const persistConfig: PersistConfig<RootState> = {
   key: "root",
   version: 1,
   storage,
+  transforms: [encryptor],
 };
 
-const reducer = combineReducers({
+// Combining reducers
+const rootReducer = combineReducers({
   user: userSlice,
+  credential: credentialSlice,
 });
 
-const persistedReducer = persistReducer(persistConfig, reducer);
+// Redux state interface
+export interface RootState {
+  user: ReturnType<typeof userSlice>;
+  credential: ReturnType<typeof credentialSlice>;
+}
+
+const persistedReducer = persistReducer<RootState>(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: persistedReducer,
@@ -34,8 +59,6 @@ export const store = configureStore({
     }),
 });
 
-export const register = createAction("REGISTER");
-export type RootState = ReturnType<typeof store.getState>;
+// Action creators and types
+export const register = createAction("register");
 export type AppDispatch = typeof store.dispatch;
-
-// export default store;

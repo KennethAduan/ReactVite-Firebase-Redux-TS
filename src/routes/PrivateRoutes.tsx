@@ -1,16 +1,16 @@
 import { Outlet, Navigate, useLocation } from "react-router-dom";
-
+import { useAppSelector } from "@/services/state/redux/hooks";
 const PrivateRoutes = () => {
   const location = useLocation();
-  const userData = localStorage.getItem("userData");
+  const { snapshot } = useAppSelector((state) => state.credential);
 
   // Redirect to /pos if userData exists and the user is trying to access the root ("/")
-  if (userData && location.pathname === "/") {
+  if (snapshot && location.pathname === "/") {
     return <Navigate to="main" replace />;
   }
 
   // If no userData and the user is trying to access a protected route, redirect to login
-  if (!userData && location.pathname !== "/") {
+  if (!snapshot && location.pathname !== "/") {
     return <Navigate to="/" replace />;
   }
 

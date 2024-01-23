@@ -6,9 +6,10 @@ const MainRoutes = () => {
     <Routes>
       <Route path="/" element={<PrivateRoutes />}>
         <Route index element={<Login />} />
-        <Route path="/main" element={<Home />} />
+
         {/* Add the Protected Routes here */}
       </Route>
+      <Route path="/main" element={<Home />} />
       <Route element={<NotFoundPage />} path="*" />
       <Route element={<Login />} path="/" />
     </Routes>

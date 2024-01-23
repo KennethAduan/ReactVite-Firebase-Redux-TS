@@ -5,7 +5,7 @@ import { persistStore } from "redux-persist";
 import { BrowserRouter } from "react-router-dom";
 const persistor = persistStore(store);
 import MainRoutes from "@/routes";
-const Providers = () => {
+const AppProviders = () => {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
@@ -17,4 +17,4 @@ const Providers = () => {
   );
 };
 
-export default Providers;
+export default AppProviders;
